@@ -128,7 +128,7 @@ The app automatically detects SafeHub connection and switches modes without user
 ### Emergency Context Extensions (`/lib/emergency-context.tsx`)
 
 **New State Added:**
-```typescript
+\`\`\`typescript
 // Person tracking
 trackedPeople: Person[]
 addTrackedPerson(uniqueId, name?)
@@ -144,7 +144,7 @@ setCycloneData(data)
 
 earthquakeData: EarthquakeData | null
 setEarthquakeData(data)
-```
+\`\`\`
 
 ### Offline Cache
 
@@ -165,7 +165,7 @@ Existing offline-first architecture preserved:
 
 ### Usage Example
 
-```typescript
+\`\`\`typescript
 const { trackedPeople, addTrackedPerson } = useEmergency();
 const { appMode } = useSafeHub();
 const { lockCompass } = usePersonLockedCompass();
@@ -177,7 +177,7 @@ addTrackedPerson('DAD-54321', 'Dad');
 if (appMode === 'awareness') {
   lockCompass('DAD-54321', 'Dad');
 }
-```
+\`\`\`
 
 ## Backward Compatibility
 
@@ -248,7 +248,7 @@ Each disaster type has:
 
 ## File Structure
 
-```
+\`\`\`
 lib/
   safehub-context.tsx              # SafeHub detection & mode switching
   emergency-context.tsx             # Extended with disaster intelligence
@@ -267,7 +267,7 @@ components/
 hooks/
   use-person-locked-compass.ts      # Person-locked compass hook
   (existing hooks preserved)
-```
+\`\`\`
 
 ## Product Goal
 
