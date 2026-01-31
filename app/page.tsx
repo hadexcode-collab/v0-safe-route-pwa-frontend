@@ -2,14 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { EmergencyProvider, useEmergency } from '@/lib/emergency-context';
+import { SafeHubProvider, useSafeHub } from '@/lib/safehub-context';
 import { setupConnectivityMonitoring, OfflineCacheManager, MOCK_SHELTERS } from '@/lib/offline-cache';
 import { EmergencyHome } from '@/components/screens/emergency-home';
 import { ShelterScreen } from '@/components/screens/shelter-screen';
 import { CompassScreen } from '@/components/screens/compass-screen';
 import { FamilyLocatorScreen } from '@/components/screens/family-locator-screen';
 import { SOSScreen } from '@/components/screens/sos-screen';
+import { SafeHubConfirmation } from '@/components/safehub-confirmation';
+import { SafeHubSituationScreen } from '@/components/screens/safehub-situation-screen';
+import { cn } from '@/lib/utils';
 
-type Screen = 'home' | 'shelter' | 'compass' | 'family' | 'sos';
+type Screen = 'home' | 'shelter' | 'compass' | 'family' | 'sos' | 'situation';
 
 function SafeRouteApp() {
   const {
@@ -20,8 +24,11 @@ function SafeRouteApp() {
     setUserLocation,
   } = useEmergency();
 
+  const { appMode, isConnectedToSafeHub } = useSafeHub();
+
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [mounted, setMounted] = useState(false);
+  const [showSafeHubPrompt, setShowSafeHubPrompt] = useState(false);
 
   // Initialize offline cache and connectivity monitoring
   useEffect(() => {
@@ -102,7 +109,6 @@ function SafeRouteApp() {
           <ShelterScreen
             onClose={() => setCurrentScreen('home')}
             onSelectShelter={(shelterId) => {
-              // Could navigate to shelter detail view
               console.log('[v0] Selected shelter:', shelterId);
             }}
           />
@@ -124,18 +130,64 @@ function SafeRouteApp() {
         return (
           <SOSScreen onClose={() => setCurrentScreen('home')} />
         );
+      case 'situation':
+        return (
+          <SafeHubSituationScreen onClose={() => setCurrentScreen('home')} />
+        );
       default:
         return <EmergencyHome />;
     }
   };
 
-  return renderScreen();
+  return (
+    <div className="relative w-full min-h-screen bg-background">
+      {/* Mode indicator banner */}
+      <div
+        className={cn(
+          'flex items-center justify-between px-4 py-2 text-xs font-bold',
+          appMode === 'awareness'
+            ? 'bg-safe text-safe-foreground'
+            : 'bg-caution text-caution-foreground'
+        )}
+      >
+        <span>{appMode === 'awareness' ? 'SafeHub Connected' : 'Survival Mode'}</span>
+        <div className="flex gap-2">
+          {appMode === 'awareness' && (
+            <button
+              onClick={() => setCurrentScreen('situation')}
+              className="px-2 py-1 bg-safe-foreground text-safe rounded text-xs font-bold hover:brightness-110"
+            >
+              Situation
+            </button>
+          )}
+          {appMode === 'survival' && (
+            <button
+              onClick={() => setShowSafeHubPrompt(true)}
+              className="px-2 py-1 bg-safe text-safe-foreground rounded text-xs font-bold hover:brightness-110"
+            >
+              At SafeHub?
+            </button>
+          )}
+        </div>
+      </div>
+
+      {renderScreen()}
+
+      {/* SafeHub confirmation dialog */}
+      <SafeHubConfirmation
+        isOpen={showSafeHubPrompt}
+        onOpenChange={setShowSafeHubPrompt}
+      />
+    </div>
+  );
 }
 
 export default function Page() {
   return (
-    <EmergencyProvider>
-      <SafeRouteApp />
-    </EmergencyProvider>
+    <SafeHubProvider>
+      <EmergencyProvider>
+        <SafeRouteApp />
+      </EmergencyProvider>
+    </SafeHubProvider>
   );
 }
