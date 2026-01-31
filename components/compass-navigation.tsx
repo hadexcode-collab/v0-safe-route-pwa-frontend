@@ -24,9 +24,15 @@ export function CompassNavigation({
   useEffect(() => {
     if (!isActive) return;
 
-    const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
+    const handleAbsoluteOrientation = (event: DeviceOrientationEvent) => {
       if (typeof event.alpha === 'number') {
-        setDeviceBearing(Math.round(event.alpha));
+        setDeviceBearing(Math.round(((event.alpha % 360) + 360) % 360));
+      }
+    };
+
+    const handleRelativeOrientation = (event: DeviceOrientationEvent) => {
+      if (typeof event.alpha === 'number') {
+        setDeviceBearing(Math.round(((event.alpha % 360) + 360) % 360));
       }
     };
 
@@ -36,17 +42,24 @@ export function CompassNavigation({
         .then((permission: string) => {
           if (permission === 'granted') {
             setCompassActive(true);
-            window.addEventListener('deviceorientation', handleDeviceOrientation);
+            // Try absolute first
+            window.addEventListener('deviceorientationabsolute', handleAbsoluteOrientation, true);
+            // Fallback to relative
+            window.addEventListener('deviceorientation', handleRelativeOrientation, true);
           }
         })
         .catch(() => setCompassActive(false));
     } else if (typeof DeviceOrientationEvent !== 'undefined') {
       setCompassActive(true);
-      window.addEventListener('deviceorientation', handleDeviceOrientation);
+      // Try absolute first
+      window.addEventListener('deviceorientationabsolute', handleAbsoluteOrientation, true);
+      // Fallback to relative
+      window.addEventListener('deviceorientation', handleRelativeOrientation, true);
     }
 
     return () => {
-      window.removeEventListener('deviceorientation', handleDeviceOrientation);
+      window.removeEventListener('deviceorientationabsolute', handleAbsoluteOrientation, true);
+      window.removeEventListener('deviceorientation', handleRelativeOrientation, true);
     };
   }, [isActive]);
 
