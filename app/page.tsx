@@ -10,9 +10,10 @@ import { CompassScreen } from '@/components/screens/compass-screen';
 import { FamilyLocatorScreen } from '@/components/screens/family-locator-screen';
 import { SOSScreen } from '@/components/screens/sos-screen';
 import { SafeHubConfirmation } from '@/components/safehub-confirmation';
+import { SafeHubSituationScreen } from '@/components/screens/safehub-situation-screen';
 import { cn } from '@/lib/utils';
 
-type Screen = 'home' | 'shelter' | 'compass' | 'family' | 'sos';
+type Screen = 'home' | 'shelter' | 'compass' | 'family' | 'sos' | 'situation';
 
 function SafeRouteApp() {
   const {
@@ -129,6 +130,10 @@ function SafeRouteApp() {
         return (
           <SOSScreen onClose={() => setCurrentScreen('home')} />
         );
+      case 'situation':
+        return (
+          <SafeHubSituationScreen onClose={() => setCurrentScreen('home')} />
+        );
       default:
         return <EmergencyHome />;
     }
@@ -146,14 +151,24 @@ function SafeRouteApp() {
         )}
       >
         <span>{appMode === 'awareness' ? 'SafeHub Connected' : 'Survival Mode'}</span>
-        {appMode === 'survival' && (
-          <button
-            onClick={() => setShowSafeHubPrompt(true)}
-            className="px-2 py-1 bg-safe text-safe-foreground rounded text-xs font-bold hover:brightness-110"
-          >
-            At SafeHub?
-          </button>
-        )}
+        <div className="flex gap-2">
+          {appMode === 'awareness' && (
+            <button
+              onClick={() => setCurrentScreen('situation')}
+              className="px-2 py-1 bg-safe-foreground text-safe rounded text-xs font-bold hover:brightness-110"
+            >
+              Situation
+            </button>
+          )}
+          {appMode === 'survival' && (
+            <button
+              onClick={() => setShowSafeHubPrompt(true)}
+              className="px-2 py-1 bg-safe text-safe-foreground rounded text-xs font-bold hover:brightness-110"
+            >
+              At SafeHub?
+            </button>
+          )}
+        </div>
       </div>
 
       {renderScreen()}
