@@ -22,6 +22,7 @@ import {
   getDirectionHint,
   formatDistance,
 } from './bearing';
+import { wsClient, type PeerDeviceData } from '@/lib/peer/wsClient';
 
 export interface UsePeerCompassResult {
   // Connection status
@@ -177,24 +178,48 @@ export function usePeerCompass(): UsePeerCompassResult {
   }, []);
 
   /**
-   * Update peer data and send to remote peer
+   * Initialize WebSocket connection and handle peer data
    */
   useEffect(() => {
-    if (!peerRef.current || localHeading === null || !localLocation) return;
-
-    // Create local peer data
-    const peerData: PeerData = {
-      heading: localHeading,
-      latitude: localLocation.latitude,
-      longitude: localLocation.longitude,
-      timestamp: Date.now(),
-      deviceId: 'local-device',
+    const handleIncomingData = (data: PeerDeviceData) => {
+      // Convert WebSocket data to PeerData format
+      const peerData: PeerData = {
+        heading: data.heading,
+        latitude: data.location.latitude,
+        longitude: data.location.longitude,
+        timestamp: data.timestamp,
+        deviceId: 'remote-peer',
+      };
+      setRemotePeerData(peerData);
+      setStatus('connected');
     };
 
-    // Send to remote peer periodically
+    wsClient.connectPeer(handleIncomingData).catch((err) => {
+      console.warn('[v0] WebSocket connection failed:', err);
+    });
+
+    return () => {
+      wsClient.disconnect();
+    };
+  }, []);
+
+  /**
+   * Update peer data and send to remote peer via WebSocket
+   */
+  useEffect(() => {
+    if (localHeading === null || !localLocation) return;
+
+    // Send local device data periodically via WebSocket
     const interval = setInterval(() => {
-      peerData.timestamp = Date.now();
-      peerRef.current?.sendPeerData(peerData);
+      const deviceData: PeerDeviceData = {
+        heading: localHeading,
+        location: {
+          latitude: localLocation.latitude,
+          longitude: localLocation.longitude,
+        },
+        timestamp: Date.now(),
+      };
+      wsClient.sendPeer(deviceData);
     }, 1000); // Send every second
 
     return () => clearInterval(interval);
