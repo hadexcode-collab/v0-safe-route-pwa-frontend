@@ -1,0 +1,71 @@
+{
+  "name": "SafeRoute - Disaster Survivor Navigation",
+  "short_name": "SafeRoute",
+  "description": "Emergency navigation and shelter finding during disasters - works offline",
+  "start_url": "/",
+  "scope": "/",
+  "display": "fullscreen",
+  "orientation": "portrait-primary",
+  "background_color": "#1E1E1E",
+  "theme_color": "#1E1E1E",
+  "icons": [
+    {
+      "src": "/icon-dark-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icon.svg",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Emergency Alert",
+      "short_name": "Emergency",
+      "description": "Quickly trigger emergency mode",
+      "url": "/?mode=emergency",
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Find Shelter",
+      "short_name": "Shelter",
+      "description": "Find nearby shelters",
+      "url": "/?screen=shelter",
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "categories": ["emergency", "utilities"],
+  "screenshots": [
+    {
+      "src": "/icon.svg",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "purpose": "any"
+    }
+  ]
+}
