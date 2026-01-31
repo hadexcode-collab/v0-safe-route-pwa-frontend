@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 interface EmergencyHomeProps {
   onNavigateToShelter?: () => void;
   onNavigateToCompass?: () => void;
+  onNavigateToSafehouseCompass?: () => void;
   onNavigateToFamily?: () => void;
   onNavigateToSOS?: () => void;
 }
@@ -15,6 +16,7 @@ interface EmergencyHomeProps {
 export function EmergencyHome({
   onNavigateToShelter,
   onNavigateToCompass,
+  onNavigateToSafehouseCompass,
   onNavigateToFamily,
   onNavigateToSOS,
 }: EmergencyHomeProps) {
@@ -139,8 +141,8 @@ export function EmergencyHome({
               <EmergencyButton
                 variant="safe"
                 size="xl"
-                label="Find Shelter"
-                onClick={onNavigateToShelter}
+                label="Safe House"
+                onClick={onNavigateToSafehouseCompass}
               />
               <EmergencyButton
                 variant="primary"

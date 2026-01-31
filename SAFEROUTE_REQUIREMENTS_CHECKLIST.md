@@ -278,7 +278,7 @@ Answer: "What is the situation outside right now?"
 
 ## DATA FLOW ARCHITECTURE ✓
 
-```
+\`\`\`
 SafeHub Wi-Fi Detection
     ↓
 Automatic Mode Switch (Survival ↔ Awareness)
@@ -292,7 +292,7 @@ Person Tracking via Unique ID
 Person-Locked Compass (when connected)
     ↓
 Situation Dashboard (Awareness Mode only)
-```
+\`\`\`
 
 ---
 

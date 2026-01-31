@@ -1,0 +1,133 @@
+export interface SafeHouse {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  type: 'shelter' | 'hospital' | 'police' | 'fire' | 'assembly';
+  capacity: number;
+  priority: 1 | 2 | 3 | 4 | 5;
+  description: string;
+}
+
+export const SAFEHOUSES: SafeHouse[] = [
+  {
+    id: 'sathyabama-main',
+    name: 'Sathyabama University Main Campus',
+    latitude: 12.8199,
+    longitude: 80.0434,
+    type: 'assembly',
+    capacity: 5000,
+    priority: 1,
+    description: 'Large open ground for mass assembly. Well-lit and equipped with basic facilities.',
+  },
+  {
+    id: 'sholinganallur-busstand',
+    name: 'Sholinganallur Bus Stand',
+    latitude: 12.8256,
+    longitude: 80.0512,
+    type: 'shelter',
+    capacity: 500,
+    priority: 2,
+    description: 'Community gathering point with roof shelter. Central location.',
+  },
+  {
+    id: 'tcs-siruseri-gate',
+    name: 'TCS Siruseri Gate',
+    latitude: 12.8140,
+    longitude: 80.0289,
+    type: 'assembly',
+    capacity: 2000,
+    priority: 2,
+    description: 'Large corporate campus with facilities. Emergency access available.',
+  },
+  {
+    id: 'elcot-sez',
+    name: 'Elcot SEZ Sholinganallur',
+    latitude: 12.8100,
+    longitude: 80.0380,
+    type: 'assembly',
+    capacity: 1500,
+    priority: 3,
+    description: 'Industrial zone with covered shelters and open grounds.',
+  },
+  {
+    id: 'navalur-junction',
+    name: 'Navalur Junction',
+    latitude: 12.8289,
+    longitude: 80.0456,
+    type: 'shelter',
+    capacity: 400,
+    priority: 2,
+    description: 'Transport hub with basic shelter facilities. Well accessible.',
+  },
+  {
+    id: 'karapakkam-fire',
+    name: 'Karapakkam Fire Station',
+    latitude: 12.8067,
+    longitude: 80.0512,
+    type: 'fire',
+    capacity: 100,
+    priority: 1,
+    description: 'Emergency fire services station. Professional rescue capabilities.',
+  },
+  {
+    id: 'govt-higher-secondary',
+    name: 'Government Higher Secondary School Sholinganallur',
+    latitude: 12.8223,
+    longitude: 80.0345,
+    type: 'shelter',
+    capacity: 800,
+    priority: 2,
+    description: 'School building with large classrooms and open grounds.',
+  },
+  {
+    id: 'apollo-clinic-omr',
+    name: 'Apollo Clinic OMR',
+    latitude: 12.8145,
+    longitude: 80.0600,
+    type: 'hospital',
+    capacity: 200,
+    priority: 1,
+    description: 'Medical facility with emergency care and staff.',
+  },
+  {
+    id: 'corporation-hall',
+    name: 'Chennai Corporation Community Hall Sholinganallur',
+    latitude: 12.8178,
+    longitude: 80.0401,
+    type: 'shelter',
+    capacity: 600,
+    priority: 2,
+    description: 'Government community center with basic amenities.',
+  },
+  {
+    id: 'neelangarai-beach',
+    name: 'Neelangarai Beach Access Point',
+    latitude: 12.8312,
+    longitude: 80.0656,
+    type: 'assembly',
+    capacity: 2000,
+    priority: 3,
+    description: 'Open beach area for evacuation in case of flooding. High ground nearby.',
+  },
+  {
+    id: 'semmenchery-shelter',
+    name: 'Semmenchery Government Shelter',
+    latitude: 12.8334,
+    longitude: 80.0234,
+    type: 'shelter',
+    capacity: 700,
+    priority: 3,
+    description: 'Government-managed emergency shelter with storage facilities.',
+  },
+  {
+    id: 'infosys-omr',
+    name: 'Infosys OMR Campus Emergency Assembly Point',
+    latitude: 12.8089,
+    longitude: 80.0678,
+    type: 'assembly',
+    capacity: 3000,
+    priority: 2,
+    description: 'Large corporate facility with emergency protocols and resources.',
+  },
+];

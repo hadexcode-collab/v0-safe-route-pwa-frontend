@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { EmergencyProvider, useEmergency } from '@/lib/emergency-context';
 import { SafeHubProvider, useSafeHub } from '@/lib/safehub-context';
 import { setupConnectivityMonitoring, OfflineCacheManager, MOCK_SHELTERS } from '@/lib/offline-cache';
+import { cacheManager } from '@/lib/offline/safehouse-cache';
 import { EmergencyHome } from '@/components/screens/emergency-home';
 import { ShelterScreen } from '@/components/screens/shelter-screen';
 import { CompassScreen } from '@/components/screens/compass-screen';
@@ -11,9 +12,10 @@ import { FamilyLocatorScreen } from '@/components/screens/family-locator-screen'
 import { SOSScreen } from '@/components/screens/sos-screen';
 import { SafeHubConfirmation } from '@/components/safehub-confirmation';
 import { SafeHubSituationScreen } from '@/components/screens/safehub-situation-screen';
+import { SafehouseCompassScreen } from '@/components/screens/safehouse-compass-screen';
 import { cn } from '@/lib/utils';
 
-type Screen = 'home' | 'shelter' | 'compass' | 'family' | 'sos' | 'situation';
+type Screen = 'home' | 'shelter' | 'compass' | 'safehouse-compass' | 'family' | 'sos' | 'situation';
 
 function SafeRouteApp() {
   const {
@@ -32,7 +34,18 @@ function SafeRouteApp() {
 
   // Initialize offline cache and connectivity monitoring
   useEffect(() => {
-    // Initialize cache
+    // Initialize safehouse cache
+    cacheManager
+      .init()
+      .then(() => cacheManager.cacheSafehouses())
+      .then(() => {
+        console.log('[v0] Safehouse cache initialized');
+      })
+      .catch((err) => {
+        console.warn('[v0] Safehouse cache init failed:', err);
+      });
+
+    // Initialize general cache
     OfflineCacheManager.initializeCache().then(() => {
       console.log('[v0] Offline cache initialized');
     });
@@ -100,6 +113,7 @@ function SafeRouteApp() {
           <EmergencyHome
             onNavigateToShelter={() => setCurrentScreen('shelter')}
             onNavigateToCompass={() => setCurrentScreen('compass')}
+            onNavigateToSafehouseCompass={() => setCurrentScreen('safehouse-compass')}
             onNavigateToFamily={() => setCurrentScreen('family')}
             onNavigateToSOS={() => setCurrentScreen('sos')}
           />
@@ -122,6 +136,8 @@ function SafeRouteApp() {
             distance={1.2}
           />
         );
+      case 'safehouse-compass':
+        return <SafehouseCompassScreen onClose={() => setCurrentScreen('home')} />;
       case 'family':
         return (
           <FamilyLocatorScreen onClose={() => setCurrentScreen('home')} />
